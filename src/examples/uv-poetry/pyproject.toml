@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uv-poetry"
+version = "0.1.0"
+description = "UV and Poetry Example."
+authors = [
+    { name = "Your Name", email = "your.email@example.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "requests==2.32.3"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==8.3.5"
+]
+
+[project.scripts]
+cksync = "cksync.cli:main"
