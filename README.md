@@ -39,16 +39,3 @@ With custom paths:
 ```bash
 cksync --uv-lock uv.lock --poetry-lock poetry.lock --project-name my-project
 ```
-
-### Command Line Options
-
-```bash
-cksync [options]
-
-Options:
-  --version          Show version and exit
-  --verbose          Show verbose output
-  --uv-lock PATH     Path to uv.lock file (default: uv.lock)
-  --poetry-lock PATH Path to poetry.lock file (default: poetry.lock)
-  --project-name NAME Optional project name to include in parsing
-```
