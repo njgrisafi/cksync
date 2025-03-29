@@ -24,6 +24,7 @@ class CkSyncNamespace(Namespace):
     uv_lock: Path
     poetry_lock: Path
     project_name: str
+    not_pretty: bool
 
 
 def get_version() -> str:
@@ -40,6 +41,7 @@ def get_arg_parser() -> ArgumentParser:
     parser.add_argument("--uv-lock", type=Path, default=UV_LOCK_DEFAULT, help="Path to uv.lock file.")
     parser.add_argument("--poetry-lock", type=Path, default=POETRY_LOCK_DEFAULT, help="Path to poetry.lock file.")
     parser.add_argument("--project-name", type=str, default="", help="Optional project name to include in parsing.")
+    parser.add_argument("--not-pretty", action="store_true", help="Print the json output, none of that fancy stuff.")
     return parser
 
 
@@ -68,23 +70,40 @@ def main(args: Sequence[str]) -> None:
         ]
     )
     diffs = res.get_diffs()
-    if diffs:
+
+    # Success
+    if len(diffs) == 0:
+        if namespace.not_pretty:
+            console.print(f"{parser.prog} success.")
+            return
+
+        package_text = "packages" if len(res.dependency_system) > 1 else "package"
         console.print(
             Panel.fit(
-                f"[red bold]Lock file differences found in {len(diffs)} packages![/]", title="Error", border_style="red"
+                f"[green bold]Lock files are in sync checked {len(res.dependency_system)} {package_text}[/] :lock:",
+                title="Success",
+                border_style="green",
             )
         )
-        output = json.dumps(diffs, indent=2)
-        console.print(JSON(output))
-        sys.exit(1)
+        return
 
+    # Error
+    if namespace.not_pretty:
+        output = json.dumps(diffs, indent=2)
+        console.print(output)
+        return
+
+    package_text = "packages" if len(diffs) > 1 else "package"
     console.print(
         Panel.fit(
-            f"[green bold]Lock files are in sync checked {len(res.dependency_system)} packages[/] :tada:",
-            title="Success",
-            border_style="green",
+            f"[red bold]Lock file differences found in {len(diffs)} {package_text}[/] :link::broken_heart:",
+            title="Error",
+            border_style="red",
         )
     )
+    output = json.dumps(diffs, indent=2)
+    console.print(JSON(output))
+    sys.exit(1)
 
 
 if __name__ == "__main__":
