@@ -21,7 +21,7 @@ def expected_dependencies() -> Any:
 
 def test_read(example_poetry_lockfile: Path) -> None:
     lockfile = PoetryLockfile(example_poetry_lockfile)
-    contents = lockfile.read()
+    contents = lockfile._read()
     assert contents is not None
     assert isinstance(contents, dict)
 

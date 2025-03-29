@@ -5,12 +5,21 @@ from cksync.lockfiles._base import LockedArtifact, LockedDependency, Lockfile
 
 
 class UvLockfile(Lockfile):
-    def parse_dependencies(self) -> list[LockedDependency]:
+    @property
+    def name(self) -> str:
+        return "uv"
+
+    def _load_dependencies(self) -> list[LockedDependency]:
         dependencies: list[LockedDependency] = []
 
-        lock_file = self.read()
+        lock_file = self._read()
 
         for package in lock_file.get("package", []):
+            # UV always include root package in lockfile, some other tools don't.
+            # If the user provided this then let's skip it.
+            if package.get("name") == self.project_name:
+                continue
+
             artifacts: list[LockedArtifact] = []
             for artifact in package.get("wheels", []):
                 artifacts.append(LockedArtifact(name=artifact["url"].split("/")[-1], hash=artifact["hash"]))
@@ -36,7 +45,7 @@ class UvLockfile(Lockfile):
                 )
             )
 
-        return sorted(dependencies, key=lambda x: x.name)
+        return dependencies
 
-    def read(self) -> dict[str, Any]:
+    def _read(self) -> dict[str, Any]:
         return tomllib.load(self.path.open("rb"))
