@@ -1,12 +1,21 @@
 [project]
 name = "cksync"
-version = "0.1.0"
+version = "0.1.1"
 description = "cksync before you change dependency mgmt tools!"
 readme = "README.md"
 authors = [
     { name = "Nick Grisafi", email = "njgrisafi@gmail.com" }
 ]
 requires-python = ">=3.11"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Typing :: Typed",
+]
 dependencies = [
     "rich>=13.9.4",
 ]
