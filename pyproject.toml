@@ -1,6 +1,6 @@
 [project]
 name = "cksync"
-version = "0.1.1"
+version = "0.1.2"
 description = "cksync before you change dependency mgmt tools!"
 readme = "README.md"
 authors = [
@@ -17,7 +17,7 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "rich>=13.9.4",
+    "rich>=13.0.0",
 ]
 
 [project.scripts]
