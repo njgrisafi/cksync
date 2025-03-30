@@ -1,7 +1,7 @@
 [project]
 name = "cksync"
 version = "0.1.0"
-description = "cksync your Python lock files!"
+description = "cksync before you change dependency mgmt tools!"
 readme = "README.md"
 authors = [
     { name = "Nick Grisafi", email = "njgrisafi@gmail.com" }
@@ -12,7 +12,7 @@ dependencies = [
 ]
 
 [project.scripts]
-cksync = "cksync:main"
+cksync = "cksync.cli.main:_main"
 
 [dependency-groups]
 dev = [

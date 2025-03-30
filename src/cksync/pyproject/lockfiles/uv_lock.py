@@ -1,13 +1,13 @@
 import tomllib
 from typing import Any
 
-from cksync.lockfiles._base import LockedArtifact, LockedDependency, Lockfile
+from cksync.pyproject.lockfiles._base import LockedArtifact, LockedDependency, Lockfile, LockFileName
 
 
 class UvLockfile(Lockfile):
     @property
-    def name(self) -> str:
-        return "uv"
+    def name(self) -> LockFileName:
+        return LockFileName.UV
 
     def _load_dependencies(self) -> list[LockedDependency]:
         dependencies: list[LockedDependency] = []

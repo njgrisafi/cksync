@@ -53,6 +53,7 @@ dependencies = [
     "memray==1.16.0",
     "textual==3.0.0",
     "web3==7.10.0",
+    "toolz==1.0.0",
 ]
 
 [project.optional-dependencies]

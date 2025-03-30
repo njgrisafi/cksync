@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from enum import StrEnum
 from typing import TYPE_CHECKING, Any
 
 from cksync import _type_utils
@@ -11,13 +12,18 @@ if TYPE_CHECKING:
 DEFAULT_SOURCE = "https://pypi.org/simple"
 
 
+class LockFileName(StrEnum):
+    POETRY = "poetry"
+    UV = "uv"
+
+
 class Lockfile:
     def __init__(self, path: Path, project_name: str = ""):
         self.project_name = project_name
         self.path = path
 
     @property
-    def name(self) -> str:
+    def name(self) -> LockFileName:
         raise NotImplementedError("Subclass must implement this method")
 
     def _read(self) -> dict[str, Any]:

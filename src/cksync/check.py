@@ -1,13 +1,12 @@
 import json
 
-from cksync.lockfiles._base import LockedDependency, Lockfile
+from cksync.pyproject.lockfiles._base import LockedDependency, Lockfile, LockFileName
 
 
 class DependencyUniverse:
-    dependency_system: dict[str, dict[str, str | None]] = {}
-
-    def __init__(self, lockfile_names: list[str]):
+    def __init__(self, lockfile_names: list[LockFileName]):
         self.lockfile_names = lockfile_names
+        self.dependency_system: dict[str, dict[str, str | None]] = {}
 
     def add_dependency(self, dependency: LockedDependency, lockfile_name: str) -> None:
         if dependency.name not in self.dependency_system:
