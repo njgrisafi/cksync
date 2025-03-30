@@ -1,6 +1,6 @@
 [project]
 name = "cksync"
-version = "0.1.0"
+version = "0.1.1"
 description = "cksync before you change dependency mgmt tools!"
 readme = "README.md"
 authors = [
