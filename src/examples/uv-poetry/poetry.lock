@@ -5484,7 +5484,6 @@ description = "List processing tools and functional utilities"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
-markers = "implementation_name == \"cpython\" or implementation_name == \"pypy\""
 files = [
     {file = "toolz-1.0.0-py3-none-any.whl", hash = "sha256:292c8f1c4e7516bf9086f8850935c799a874039c8bcf959d47b600e4c44a6236"},
     {file = "toolz-1.0.0.tar.gz", hash = "sha256:2c86e3d9a04798ac556793bced838816296a2f085017664e4995cb40a1047a02"},
@@ -6059,4 +6058,4 @@ dev = ["alembic", "ipython", "libcst", "mypy", "pytest", "pytest-django", "ruff"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11,<4.0.0"
-content-hash = "13493402424d06e8fb1379ea8a2055ad34b62f9a3e54255fad507a28d702eb9e"
+content-hash = "e3b9623e8c3700fd6f628a838ca491ba338369509ad11097c4011895d84f6d25"

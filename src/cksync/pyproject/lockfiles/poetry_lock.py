@@ -1,13 +1,13 @@
 import tomllib
 from typing import Any
 
-from cksync.lockfiles._base import DEFAULT_SOURCE, LockedArtifact, LockedDependency, Lockfile
+from cksync.pyproject.lockfiles._base import DEFAULT_SOURCE, LockedArtifact, LockedDependency, Lockfile, LockFileName
 
 
 class PoetryLockfile(Lockfile):
     @property
-    def name(self) -> str:
-        return "poetry"
+    def name(self) -> LockFileName:
+        return LockFileName.POETRY
 
     def _load_dependencies(self) -> list[LockedDependency]:
         lock_file = self._read()

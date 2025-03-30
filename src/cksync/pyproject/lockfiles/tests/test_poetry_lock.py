@@ -5,8 +5,8 @@ from typing import Any
 
 import pytest
 
-from cksync.lockfiles.poetry_lock import PoetryLockfile
-from cksync.lockfiles.tests import test_data
+from cksync.pyproject.lockfiles.poetry_lock import PoetryLockfile
+from cksync.pyproject.lockfiles.tests import test_data
 
 
 @pytest.fixture

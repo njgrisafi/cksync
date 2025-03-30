@@ -1,0 +1,129 @@
+name: Publish to PyPI
+
+on:
+  push:
+    branches:
+      - "**"
+  release:
+    types:
+      - published
+
+jobs:
+  build:
+    name: Build distribution 📦 for Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.6.9"
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Build a binary wheel and a source tarball
+        run: uv build
+      - name: Store the distribution packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions-${{ matrix.python-version }}
+          path: dist/
+
+  publish-to-pypi:
+    name: >-
+      Publish Python 🐍 distribution 📦 to PyPI
+    if: github.event_name == 'release' && github.event.action == 'published'
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/cksync
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Download all the dists
+        uses: actions/download-artifact@v4
+        with:
+          pattern: python-package-distributions-*
+          path: dist/
+          merge-multiple: true
+      - name: Publish distribution 📦 to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+
+  github-release:
+    name: >-
+      Sign the Python 🐍 distribution 📦 with Sigstore
+      and upload them to GitHub Release
+    needs:
+      - publish-to-pypi
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+      - name: Download all the dists
+        uses: actions/download-artifact@v4
+        with:
+          pattern: python-package-distributions-*
+          path: dist/
+          merge-multiple: true
+      - name: Sign the dists with Sigstore
+        uses: sigstore/gh-action-sigstore-python@v3.0.0
+        with:
+          release-signing-artifacts: false
+          inputs: >-
+            ./dist/*.tar.gz
+            ./dist/*.whl
+      - name: Upload artifact signatures to GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        # Upload to GitHub Release using the `gh` CLI.
+        # `dist/` contains the built packages, and the
+        # sigstore-produced signatures and certificates.
+        run: >-
+          gh release upload
+          "$GITHUB_REF_NAME" dist/**
+          --repo "$GITHUB_REPOSITORY"
+
+  publish-to-testpypi:
+    if: github.ref == 'refs/heads/main'
+    name: Publish Python 🐍 distribution 📦 to TestPyPI
+    needs:
+      - build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/cksync
+
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Download all the dists
+        uses: actions/download-artifact@v4
+        with:
+          pattern: python-package-distributions-*
+          path: dist/
+          merge-multiple: true
+      - name: Publish distribution 📦 to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true
+          verbose: true
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          repository-url: https://test.pypi.org/legacy/

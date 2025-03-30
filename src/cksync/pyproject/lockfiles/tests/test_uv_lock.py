@@ -5,8 +5,8 @@ from typing import Any
 
 import pytest
 
-from cksync.lockfiles.tests import test_data
-from cksync.lockfiles.uv_lock import UvLockfile
+from cksync.pyproject.lockfiles.tests import test_data
+from cksync.pyproject.lockfiles.uv_lock import UvLockfile
 
 
 @pytest.fixture
