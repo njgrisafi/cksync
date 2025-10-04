@@ -1,4 +1,4 @@
-target-version = "py313"
+target-version = "py311"
 
 line-length = 120
 indent-width = 4
