@@ -33,6 +33,8 @@ class UvLockfile(Lockfile):
             if "source" in package:
                 if "editable" in package["source"]:
                     source = "editable"
+                elif "directory" in package["source"]:
+                    source = package["source"]["directory"]
                 else:
                     source = package["source"]["registry"]
 
